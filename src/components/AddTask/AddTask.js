@@ -1,9 +1,16 @@
 // src/components/AddTask/AddTask.js
 
-
 import React, { Component } from 'react';
 import axios from 'axios';
 import { withRouter } from 'react-router';
+// const path = require('path')
+// require('dotenv').config({ path: path.resolve(__dirname, 'src/.env') })
+// console.log('PATH', path.resolve(__dirname, 'src/.env') )
+// const SERVER_HOST= process.env.SERVER_HOST
+// const SERVER_PORT=process.env.SERVER_PORT
+
+const SERVER_HOST="macair"
+const SERVER_PORT=5000
 
 class AddTask extends Component {
   state = { 
@@ -21,7 +28,7 @@ class AddTask extends Component {
  // we need to know to which project the task belongs, 
  // therefore we get it's 'id'
 
-    axios.post("http://localhost:5000/api/tasks", { title, description, projectId: id })
+    axios.post("http://"+SERVER_HOST+":"+SERVER_PORT+"/api/tasks/", { title, description, projectId: id })
       .then( () => {
 
      // after form submit, GET project again to display the updated task list  

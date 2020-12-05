@@ -6,10 +6,19 @@ import { Link } from 'react-router-dom';
 import EditProject from './../../components/EditProject/EditProject';
 
 import AddTask from "./../../components/AddTask/AddTask";
+// const path = require('path')
+// require('dotenv').config({ path: path.resolve(__dirname, 'src/.env') })
+// console.log('PATH', path.resolve(__dirname, 'src/.env') )
+// const SERVER_HOST= process.env.SERVER_HOST
+// const SERVER_PORT=process.env.SERVER_PORT
+
+const SERVER_HOST="macair"
+const SERVER_PORT=5000
 
 class ProjectDetails extends Component {
   
   state = {
+    _id:"",
     title: " ",
     description: " ",
     tasks: []
@@ -23,11 +32,11 @@ class ProjectDetails extends Component {
   getSingleProject = () => {                           
     const { id } = this.props.match.params;
 
-    axios.get(`http://localhost:5000/api/projects/${id}`)
+    axios.get("http://"+SERVER_HOST+":"+SERVER_PORT+"/api/projects/"+id)
       .then( (apiResponse) =>{
         const theProject = apiResponse.data;
-        const { title, description, tasks } = theProject;
-        this.setState( { title, description, tasks } );
+        const { _id, title, description, tasks } = theProject;
+        this.setState( { _id, title, description, tasks } );
       })
       .catch((err) => console.log(err));
   }
@@ -35,7 +44,7 @@ class ProjectDetails extends Component {
   deleteProject = () => {														// <== CREATE METHOD
     const { id } = this.props.match.params;
     
-    axios.delete(`http://localhost:5000/api/projects/${id}`)
+    axios.delete("http://"+SERVER_HOST+":"+SERVER_PORT+"/api/projects/"+id)
     	.then( () => this.props.history.push('/projects') )	// causes Router URL change
     	.catch( (err) => console.log(err));
   }
@@ -68,7 +77,7 @@ class ProjectDetails extends Component {
             return(
                <Link 
                  key={task._id}
-                 to={`/projects/${this.state._id}/tasks/${task._id}`}
+                 to={`/tasks/${task._id}`}
                >
                 
                  <div className="task">

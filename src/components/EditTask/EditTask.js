@@ -12,7 +12,7 @@ import { withRouter } from 'react-router';
 const SERVER_HOST="macair"
 const SERVER_PORT=5000
 
-class EditProject extends Component {
+class EditTask extends Component {
   state = {
     title: "", 
     description: "",
@@ -23,13 +23,13 @@ class EditProject extends Component {
   handleFormSubmit = (event) => {
     event.preventDefault();
     const { title, description } = this.state;
-    const { id } = this.props.match.params;
-  
-    axios.put("http://"+SERVER_HOST+":"+SERVER_PORT+"/api/projects/"+id,
+    const idTask  = this.props.taskId;
+
+    axios.put("http://"+SERVER_HOST+":"+SERVER_PORT+"/api/tasks/"+idTask,
       { title, description }
     )
     .then( () => {
-      this.props.getTheProject();
+      this.props.getTheTask();
       // this.props.history.push('/projects');    
       // after submitting the form, we could also redirect to '/projects'
     })
@@ -44,18 +44,17 @@ class EditProject extends Component {
     //  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Property_accessors
   }
   componentDidMount(){                                    
-    this.getSingleProject();
+    this.getSingleTask();
   }
 
 
-  getSingleProject = () => {                           
-    const { id } = this.props.match.params;
-
-    axios.get("http://"+SERVER_HOST+":"+SERVER_PORT+"/api/projects/"+id)
+  getSingleTask = () => {                           
+    const idTask  = this.props.taskId;
+    axios.get("http://"+SERVER_HOST+":"+SERVER_PORT+"/api/tasks/"+idTask)
       .then( (apiResponse) =>{
-        const theProject = apiResponse.data;
-        const { title, description, tasks } = theProject;
-        this.setState( { title, description, tasks } );
+        const theTask = apiResponse.data;
+        const { _id, title, description } = theTask;
+        this.setState( { _id, title, description } );
       })
       .catch((err) => console.log(err));
   }
@@ -87,4 +86,4 @@ class EditProject extends Component {
 
 // By wrapping EditProject in withRouter, we inject react-router props (match, location, history)
 // to the component that help us to get value from the URL (this.props.match.params)
-export default withRouter(EditProject);
+export default withRouter(EditTask);
